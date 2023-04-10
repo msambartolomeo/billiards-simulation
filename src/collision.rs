@@ -1,6 +1,6 @@
 pub trait Collide<T> {
-    fn colide(&mut self, other: &mut T);
-    fn get_colision_time(&self, other: &T) -> f64;
+    fn collide(&mut self, other: &mut T);
+    fn get_collision_time(&self, other: &T) -> f64;
 }
 
 pub struct Ball {
@@ -25,31 +25,31 @@ pub enum Wall {
 }
 
 impl Collide<Ball> for Ball {
-    fn colide(&mut self, other: &mut Ball) {
+    fn collide(&mut self, other: &mut Ball) {
         todo!()
     }
 
-    fn get_colision_time(&self, other: &Ball) -> f64 {
+    fn get_collision_time(&self, other: &Ball) -> f64 {
         todo!()
     }
 }
 
 impl Collide<Hole> for Ball {
-    fn colide(&mut self, other: &mut Hole) {
+    fn collide(&mut self, other: &mut Hole) {
         todo!()
     }
 
-    fn get_colision_time(&self, other: &Hole) -> f64 {
+    fn get_collision_time(&self, other: &Hole) -> f64 {
         todo!()
     }
 }
 
 impl Collide<Wall> for Ball {
-    fn colide(&mut self, other: &mut Wall) {
+    fn collide(&mut self, other: &mut Wall) {
         todo!()
     }
 
-    fn get_colision_time(&self, other: &Wall) -> f64 {
+    fn get_collision_time(&self, other: &Wall) -> f64 {
         todo!()
     }
 }
