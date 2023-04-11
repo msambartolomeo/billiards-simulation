@@ -1,4 +1,4 @@
-use crate::billiards::constants::{Hole, Wall};
+use super::constants::{Hole, Wall, BALL_MASS, BALL_RADIUS};
 
 pub trait Collide<T> {
     fn collide(&mut self, other: &mut T);
@@ -11,8 +11,21 @@ pub struct Ball {
     v_x: f64,
     v_y: f64,
     r: f64,
+    mass: u32,
 }
 
+impl Ball {
+    pub fn new(x: f64, y: f64) -> Self {
+        Ball {
+            x,
+            y,
+            v_x: 0.0,
+            v_y: 0.0,
+            r: BALL_RADIUS,
+            mass: BALL_MASS,
+        }
+    }
+}
 impl Collide<Ball> for Ball {
     fn collide(&mut self, other: &mut Ball) {
         todo!()

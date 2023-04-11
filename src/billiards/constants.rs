@@ -1,9 +1,9 @@
 const TABLE_WITDH: f64 = 112.0;
 const TABLE_LENGTH: f64 = 224.0;
-const BALL_COUNT: u32 = 16;
-const BALL_MASS: u32 = 165;
-const BALL_DIAMETER: f64 = 5.7;
-const HOLE_RADIUS: f64 = BALL_DIAMETER;
+pub const BALL_COUNT: usize = 16;
+pub const BALL_MASS: u32 = 165;
+pub const BALL_RADIUS: f64 = 5.7 / 2.0;
+const HOLE_RADIUS: f64 = BALL_RADIUS * 2.0;
 
 pub enum Hole {
     BottomLeft,
