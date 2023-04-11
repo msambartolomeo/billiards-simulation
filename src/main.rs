@@ -1,5 +1,7 @@
+use billiards::Table;
+
 mod billiards;
 
 fn main() {
-    println!("Hello, world!");
+    Table::default();
 }

@@ -10,6 +10,15 @@ pub struct Table {
     collidables: HashMap<usize, Box<dyn Collidable>>,
 }
 
+impl Default for Table {
+    fn default() -> Self {
+        // TODO: Calculate random dist
+        let dist = 0.0;
+
+        Self::new(dist)
+    }
+}
+
 impl Table {
     pub fn new(dist: f64) -> Self {
         let mut collidables: HashMap<usize, Box<dyn Collidable>> = HashMap::new();
