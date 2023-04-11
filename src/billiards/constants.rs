@@ -1,9 +1,11 @@
-const TABLE_WITDH: f64 = 112.0;
-const TABLE_LENGTH: f64 = 224.0;
+pub const TABLE_WIDTH: f64 = 112.0;
+pub const TABLE_LENGTH: f64 = 224.0;
+pub const HOLE_RADIUS: f64 = BALL_RADIUS * 2.0;
 pub const BALL_COUNT: usize = 16;
 pub const BALL_MASS: u32 = 165;
 pub const BALL_RADIUS: f64 = 5.7 / 2.0;
-const HOLE_RADIUS: f64 = BALL_RADIUS * 2.0;
+pub const NOISE_LOWER_BOUND: f64 = 0.02;
+pub const NOISE_UPPER_BOUND: f64 = 0.03;
 
 pub enum Hole {
     BottomLeft,
@@ -31,9 +33,9 @@ impl Hole {
             Hole::BottomLeft => (0.0, 0.0),
             Hole::BottomMiddle => (TABLE_LENGTH / 2.0, 0.0),
             Hole::BottomRight => (TABLE_LENGTH, 0.0),
-            Hole::TopLeft => (0.0, TABLE_WITDH),
-            Hole::TopMiddle => (TABLE_LENGTH / 2.0, TABLE_WITDH),
-            Hole::TopRight => (TABLE_LENGTH, TABLE_WITDH),
+            Hole::TopLeft => (0.0, TABLE_WIDTH),
+            Hole::TopMiddle => (TABLE_LENGTH / 2.0, TABLE_WIDTH),
+            Hole::TopRight => (TABLE_LENGTH, TABLE_WIDTH),
         }
     }
 
@@ -56,7 +58,7 @@ impl Wall {
 
     pub fn coordinate(&self) -> f64 {
         match self {
-            Wall::Top => TABLE_WITDH,
+            Wall::Top => TABLE_WIDTH,
             Wall::Bottom | Wall::Left => 0.0,
             Wall::Right => TABLE_LENGTH,
         }
