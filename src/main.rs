@@ -1,4 +1,4 @@
-mod collision;
+mod billiards;
 
 fn main() {
     println!("Hello, world!");

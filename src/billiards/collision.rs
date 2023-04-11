@@ -1,3 +1,5 @@
+use crate::billiards::constants::{Hole, Wall};
+
 pub trait Collide<T> {
     fn collide(&mut self, other: &mut T);
     fn get_collision_time(&self, other: &T) -> f64;
@@ -9,19 +11,6 @@ pub struct Ball {
     v_x: f64,
     v_y: f64,
     r: f64,
-}
-
-pub struct Hole {
-    x: f64,
-    y: f64,
-    r: f64,
-}
-
-pub enum Wall {
-    Top,
-    Bottom,
-    Left,
-    Right,
 }
 
 impl Collide<Ball> for Ball {
