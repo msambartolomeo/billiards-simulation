@@ -26,6 +26,14 @@ impl Ball {
         }
     }
 }
+
+// NOTE: Marker trait for all objects that can collide
+pub trait Collidable {}
+
+impl Collidable for Ball {}
+impl Collidable for Wall {}
+impl Collidable for Hole {}
+
 impl Collide<Ball> for Ball {
     fn collide(&mut self, other: &mut Ball) {
         todo!()
