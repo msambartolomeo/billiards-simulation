@@ -8,18 +8,29 @@ const HOLE_RADIUS: f64 = BALL_RADIUS * 2.0;
 pub enum Hole {
     BottomLeft,
     BottomMiddle,
-    BottomUp,
+    BottomRight,
     TopLeft,
     TopMiddle,
     TopRight,
 }
 
 impl Hole {
+    pub fn variants() -> [Hole; 6] {
+        [
+            Hole::BottomLeft,
+            Hole::BottomMiddle,
+            Hole::BottomRight,
+            Hole::TopLeft,
+            Hole::TopMiddle,
+            Hole::TopRight,
+        ]
+    }
+
     pub fn coordinates(&self) -> (f64, f64) {
         match self {
             Hole::BottomLeft => (0.0, 0.0),
             Hole::BottomMiddle => (TABLE_LENGTH / 2.0, 0.0),
-            Hole::BottomUp => (TABLE_LENGTH, 0.0),
+            Hole::BottomRight => (TABLE_LENGTH, 0.0),
             Hole::TopLeft => (0.0, TABLE_WITDH),
             Hole::TopMiddle => (TABLE_LENGTH / 2.0, TABLE_WITDH),
             Hole::TopRight => (TABLE_LENGTH, TABLE_WITDH),
@@ -39,6 +50,10 @@ pub enum Wall {
 }
 
 impl Wall {
+    pub fn variants() -> [Wall; 4] {
+        [Wall::Top, Wall::Bottom, Wall::Left, Wall::Right]
+    }
+
     pub fn coordinate(&self) -> f64 {
         match self {
             Wall::Top => TABLE_WITDH,
