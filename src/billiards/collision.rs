@@ -1,11 +1,14 @@
-use super::constants::{Hole, Wall, BALL_MASS, BALL_RADIUS};
+use crate::billiards::constants::TABLE_LENGTH;
+
+use super::constants::{Hole, Wall, BALL_MASS, BALL_RADIUS, TABLE_WIDTH};
 
 pub trait Collide<T> {
-    fn collide(&mut self, other: &mut T);
+    fn collide(&mut self, other: &mut T) -> bool;
     fn get_collision_time(&self, other: &T) -> f64;
 }
 
 pub struct Ball {
+    id: usize,
     x: f64,
     y: f64,
     v_x: f64,
@@ -15,8 +18,9 @@ pub struct Ball {
 }
 
 impl Ball {
-    pub fn new(x: f64, y: f64) -> Self {
+    pub fn new(id: usize, x: f64, y: f64) -> Self {
         Ball {
+            id,
             x,
             y,
             v_x: 0.0,
@@ -24,6 +28,12 @@ impl Ball {
             r: BALL_RADIUS,
             mass: BALL_MASS,
         }
+    }
+}
+
+impl PartialEq for Ball {
+    fn eq(&self, other: &Self) -> bool {
+        self.id == other.id
     }
 }
 
@@ -60,21 +70,68 @@ impl Collide<Ball> for Ball {
 }
 
 impl Collide<Hole> for Ball {
-    fn collide(&mut self, other: &mut Hole) {
+    fn collide(&mut self, other: &mut Hole) -> bool {
         todo!()
     }
 
     fn get_collision_time(&self, other: &Hole) -> f64 {
+        match other {
+            Hole::TopLeft => {}
+            Hole::TopMiddle => {}
+            Hole::TopRight => {}
+            Hole::BottomLeft => {}
+            Hole::BottomMiddle => {}
+            Hole::BottomRight => {}
+        }
         todo!()
     }
 }
 
 impl Collide<Wall> for Ball {
-    fn collide(&mut self, other: &mut Wall) {
-        todo!()
+    fn collide(&mut self, other: &mut Wall) -> bool {
+        match other {
+            Wall::Top => {
+                self.v_y = -self.v_y;
+            }
+            Wall::Right => {
+                self.v_x = -self.v_x;
+            }
+            Wall::Bottom => {
+                self.v_y = -self.v_y;
+            }
+            Wall::Left => {
+                self.v_x = -self.v_x;
+            }
+        }
+        false
     }
 
     fn get_collision_time(&self, other: &Wall) -> f64 {
-        todo!()
+        match other {
+            Wall::Top => {
+                if self.v_y <= 0.0 {
+                    return std::f64::INFINITY;
+                }
+                return (TABLE_WIDTH - self.y - self.r) / self.v_y;
+            }
+            Wall::Right => {
+                if self.v_x <= 0.0 {
+                    return std::f64::INFINITY;
+                }
+                return (TABLE_LENGTH - self.x - self.r) / self.v_x;
+            }
+            Wall::Bottom => {
+                if self.v_y >= 0.0 {
+                    return std::f64::INFINITY;
+                }
+                return (self.y - self.r) / self.v_y;
+            }
+            Wall::Left => {
+                if self.v_x >= 0.0 {
+                    return std::f64::INFINITY;
+                }
+                return (self.x - self.r) / self.v_x;
+            }
+        }
     }
 }

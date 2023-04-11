@@ -1,13 +1,17 @@
-use std::collections::HashMap;
+use std::collections::{BTreeSet, HashMap};
 
 use collision::{Ball, Collidable};
 use constants::{Hole, Wall, BALL_COUNT};
 
+use self::event::Event;
+
 mod collision;
 mod constants;
+mod event;
 
 pub struct Table {
-    collidables: HashMap<usize, Box<dyn Collidable>>,
+    collidables: HashMap<usize, Ball>,
+    events: BTreeSet<Event>,
 }
 
 impl Default for Table {
@@ -25,7 +29,7 @@ impl Table {
 
         for i in 0..BALL_COUNT {
             // TODO: create real balls
-            let ball = Ball::new(0.0, 0.0);
+            let ball = Ball::new(i, 0.0, 0.0);
 
             collidables.insert(i, Box::new(ball));
         }
@@ -40,6 +44,12 @@ impl Table {
             i += 1;
         }
 
-        Table { collidables }
+        let events = BTreeSet::new();
+        // TODO: Calculate events
+
+        Table {
+            collidables,
+            events,
+        }
     }
 }
