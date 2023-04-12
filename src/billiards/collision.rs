@@ -58,14 +58,6 @@ impl Collide<Hole> for Ball {
     }
 
     fn get_collision_time(&self, other: &Hole) -> f64 {
-        match other {
-            Hole::TopLeft => {}
-            Hole::TopMiddle => {}
-            Hole::TopRight => {}
-            Hole::BottomLeft => {}
-            Hole::BottomMiddle => {}
-            Hole::BottomRight => {}
-        }
         todo!()
     }
 }
@@ -73,16 +65,10 @@ impl Collide<Hole> for Ball {
 impl Collide<Wall> for Ball {
     fn collide(&mut self, other: &mut Wall) -> bool {
         match other {
-            Wall::Top => {
+            Wall::Top | Wall::Bottom => {
                 self.v_y = -self.v_y;
             }
-            Wall::Right => {
-                self.v_x = -self.v_x;
-            }
-            Wall::Bottom => {
-                self.v_y = -self.v_y;
-            }
-            Wall::Left => {
+            Wall::Right | Wall::Left => {
                 self.v_x = -self.v_x;
             }
         }
@@ -95,25 +81,25 @@ impl Collide<Wall> for Ball {
                 if self.v_y <= 0.0 {
                     return std::f64::INFINITY;
                 }
-                return (TABLE_WIDTH - self.y - self.r) / self.v_y;
+                (TABLE_WIDTH - self.y - self.r) / self.v_y
             }
             Wall::Right => {
                 if self.v_x <= 0.0 {
                     return std::f64::INFINITY;
                 }
-                return (TABLE_LENGTH - self.x - self.r) / self.v_x;
+                (TABLE_LENGTH - self.x - self.r) / self.v_x
             }
             Wall::Bottom => {
                 if self.v_y >= 0.0 {
                     return std::f64::INFINITY;
                 }
-                return (self.y - self.r) / self.v_y;
+                (self.y - self.r) / self.v_y
             }
             Wall::Left => {
                 if self.v_x >= 0.0 {
                     return std::f64::INFINITY;
                 }
-                return (self.x - self.r) / self.v_x;
+                (self.x - self.r) / self.v_x
             }
         }
     }

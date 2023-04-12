@@ -70,13 +70,11 @@ const BALL_RADIUS_WITH_SPACING: f64 = BALL_RADIUS + BALL_SPACING_UPPER_BOUND;
 pub fn get_balls_starting_position() -> Vec<(f64, f64)> {
     let mut positions = Vec::with_capacity(BALL_COUNT - 1);
 
-    for row in 0..5 {
+    for (row, y_coordinates) in Y_COORDINATES_PER_ROW.iter().enumerate() {
         let x = 5f64.sqrt() * BALL_RADIUS_WITH_SPACING * row as f64;
 
-        for y in &Y_COORDINATES_PER_ROW[row] {
-            if let Some(y) = y {
-                positions.push((TABLE_LENGTH - TABLE_WIDTH / 2.0 + x, TABLE_WIDTH / 2.0 + y))
-            }
+        for y in y_coordinates.iter().flatten() {
+            positions.push((TABLE_LENGTH - TABLE_WIDTH / 2.0 + x, TABLE_WIDTH / 2.0 + y));
         }
     }
 
