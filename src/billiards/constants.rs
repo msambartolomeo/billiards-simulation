@@ -1,11 +1,15 @@
+use std::ops::RangeInclusive;
+
 pub const TABLE_WIDTH: f64 = 112.0;
 pub const TABLE_LENGTH: f64 = 224.0;
 pub const HOLE_RADIUS: f64 = BALL_RADIUS * 2.0;
 pub const BALL_COUNT: usize = 16;
 pub const BALL_MASS: u32 = 165;
 pub const BALL_RADIUS: f64 = 5.7 / 2.0;
-pub const NOISE_LOWER_BOUND: f64 = 0.02;
-pub const NOISE_UPPER_BOUND: f64 = 0.03;
+pub const BALL_SPACING_LOWER_BOUND: f64 = 0.02;
+pub const BALL_SPACING_UPPER_BOUND: f64 = 0.03;
+pub const BALL_SPACING_RANGE: RangeInclusive<f64> =
+    BALL_SPACING_LOWER_BOUND..=BALL_SPACING_UPPER_BOUND;
 
 pub const HOLE_VARIANTS: [Hole; 6] = [
     Hole::BottomLeft,
@@ -60,3 +64,53 @@ impl Wall {
         }
     }
 }
+
+const BALL_RADIUS_WITH_SPACING: f64 = BALL_RADIUS + BALL_SPACING_UPPER_BOUND;
+
+pub fn get_balls_starting_position() -> Vec<(f64, f64)> {
+    let mut positions = Vec::with_capacity(BALL_COUNT - 1);
+
+    for row in 0..5 {
+        let x = 5f64.sqrt() * BALL_RADIUS_WITH_SPACING * row as f64;
+
+        for y in &Y_COORDINATES_PER_ROW[row] {
+            if let Some(y) = y {
+                positions.push((TABLE_LENGTH - TABLE_WIDTH / 2.0 + x, TABLE_WIDTH / 2.0 + y))
+            }
+        }
+    }
+
+    positions
+}
+
+const Y_COORDINATES_PER_ROW: [[Option<f64>; 5]; 5] = [
+    [Some(0.0), None, None, None, None],
+    [
+        Some(-BALL_RADIUS_WITH_SPACING),
+        Some(BALL_RADIUS_WITH_SPACING),
+        None,
+        None,
+        None,
+    ],
+    [
+        Some(-2.0 * BALL_RADIUS_WITH_SPACING),
+        Some(0.0),
+        Some(2.0 * BALL_RADIUS_WITH_SPACING),
+        None,
+        None,
+    ],
+    [
+        Some(-3.0 * BALL_RADIUS_WITH_SPACING),
+        Some(-BALL_RADIUS_WITH_SPACING),
+        Some(BALL_RADIUS_WITH_SPACING),
+        Some(3.0 * BALL_RADIUS_WITH_SPACING),
+        None,
+    ],
+    [
+        Some(-4.0 * BALL_RADIUS_WITH_SPACING),
+        Some(-2.0 * BALL_RADIUS_WITH_SPACING),
+        Some(0.0),
+        Some(2.0 * BALL_RADIUS_WITH_SPACING),
+        Some(4.0 * BALL_RADIUS_WITH_SPACING),
+    ],
+];
