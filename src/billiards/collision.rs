@@ -1,6 +1,4 @@
-use crate::billiards::constants::TABLE_LENGTH;
-
-use super::constants::{Hole, Wall, BALL_MASS, BALL_RADIUS, TABLE_WIDTH};
+use super::constants::{Hole, Wall, BALL_MASS, BALL_RADIUS, TABLE_LENGTH, TABLE_WIDTH};
 
 pub trait Collide<T> {
     fn collide(&mut self, other: &mut T) -> bool;
@@ -8,7 +6,6 @@ pub trait Collide<T> {
 }
 
 pub struct Ball {
-    id: usize,
     x: f64,
     y: f64,
     v_x: f64,
@@ -20,7 +17,6 @@ pub struct Ball {
 impl Ball {
     pub fn new(id: usize, x: f64, y: f64) -> Self {
         Ball {
-            id,
             x,
             y,
             v_x: 0.0,
@@ -31,21 +27,8 @@ impl Ball {
     }
 }
 
-impl PartialEq for Ball {
-    fn eq(&self, other: &Self) -> bool {
-        self.id == other.id
-    }
-}
-
-// NOTE: Marker trait for all objects that can collide
-pub trait Collidable {}
-
-impl Collidable for Ball {}
-impl Collidable for Wall {}
-impl Collidable for Hole {}
-
 impl Collide<Ball> for Ball {
-    fn collide(&mut self, other: &mut Ball) {
+    fn collide(&mut self, other: &mut Ball) -> bool {
         todo!()
     }
 

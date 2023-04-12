@@ -7,6 +7,17 @@ pub const BALL_RADIUS: f64 = 5.7 / 2.0;
 pub const NOISE_LOWER_BOUND: f64 = 0.02;
 pub const NOISE_UPPER_BOUND: f64 = 0.03;
 
+pub const HOLE_VARIANTS: [Hole; 6] = [
+    Hole::BottomLeft,
+    Hole::BottomMiddle,
+    Hole::BottomRight,
+    Hole::TopLeft,
+    Hole::TopMiddle,
+    Hole::TopRight,
+];
+
+pub const WALL_VARIANTS: [Wall; 4] = [Wall::Top, Wall::Bottom, Wall::Left, Wall::Right];
+
 pub enum Hole {
     BottomLeft,
     BottomMiddle,
@@ -17,17 +28,6 @@ pub enum Hole {
 }
 
 impl Hole {
-    pub fn variants() -> [Hole; 6] {
-        [
-            Hole::BottomLeft,
-            Hole::BottomMiddle,
-            Hole::BottomRight,
-            Hole::TopLeft,
-            Hole::TopMiddle,
-            Hole::TopRight,
-        ]
-    }
-
     pub fn coordinates(&self) -> (f64, f64) {
         match self {
             Hole::BottomLeft => (0.0, 0.0),
@@ -52,10 +52,6 @@ pub enum Wall {
 }
 
 impl Wall {
-    pub fn variants() -> [Wall; 4] {
-        [Wall::Top, Wall::Bottom, Wall::Left, Wall::Right]
-    }
-
     pub fn coordinate(&self) -> f64 {
         match self {
             Wall::Top => TABLE_WIDTH,

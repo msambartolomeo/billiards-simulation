@@ -1,13 +1,11 @@
-use super::collision::{Ball, Collidable};
-
 pub struct Event {
-    time: f64,
-    ball: Ball,
-    collidable: Box<dyn Collidable>,
+    pub time: f64,
+    pub ball: usize,
+    pub collidable: usize,
 }
 
 impl Event {
-    fn new(time: f64, ball: Ball, collidable: Box<dyn Collidable>) -> Self {
+    fn new(time: f64, ball: usize, collidable: usize) -> Self {
         Self {
             time,
             ball,
@@ -19,7 +17,7 @@ impl Event {
 impl PartialEq for Event {
     fn eq(&self, other: &Self) -> bool {
         // NOTE: We assume a ball can't collide with two objects at the exact same time
-        self.time == other.time && self.ball == other.ball
+        self.time == other.time && self.ball == other.ball && self.collidable == other.collidable
     }
 }
 
