@@ -28,7 +28,7 @@ impl Table {
 
         for i in 0..BALL_COUNT {
             // TODO: create real balls
-            let ball = Ball::new(i, 0.0, 0.0);
+            let ball = Ball::new(0.0, 0.0);
 
             balls.push(ball);
         }

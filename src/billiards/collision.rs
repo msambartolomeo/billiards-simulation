@@ -15,7 +15,7 @@ pub struct Ball {
 }
 
 impl Ball {
-    pub fn new(id: usize, x: f64, y: f64) -> Self {
+    pub fn new(x: f64, y: f64) -> Self {
         Ball {
             x,
             y,
