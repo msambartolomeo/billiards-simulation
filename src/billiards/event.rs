@@ -6,7 +6,7 @@ pub struct Event {
 }
 
 impl Event {
-    fn new(time: f64, ball: usize, collidable: usize) -> Self {
+    pub fn new(time: f64, ball: usize, collidable: usize) -> Self {
         Self {
             time,
             ball,

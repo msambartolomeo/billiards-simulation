@@ -73,14 +73,6 @@ impl Table {
                     };
 
                     ball.collide(other_ball);
-
-                    self.events.retain(|e| {
-                        e.ball != current.collidable && e.collidable != current.collidable
-                    });
-
-                    let mut i = 0;
-
-                    // TODO: new events for other_ball
                 }
                 16..=21 => {
                     let ball = &mut self.balls[current.ball];
@@ -98,21 +90,37 @@ impl Table {
                 _ => panic!("boom"),
             }
 
-            self.events
-                .retain(|e| e.ball != current.ball && e.collidable != current.ball);
-
-            // TODO: add events for ball
-
             // NOTE: advance time of events
-            self.events
-                .iter_mut()
-                // NOTE: do not change the time of the newly added balls
-                .filter(|e| e.ball != current.collidable && e.ball != current.ball)
-                .for_each(|e| e.time -= current.time);
+            self.events.iter_mut().for_each(|e| e.time -= current.time);
+
+            // If colidable is ball calculate its new events
+            if (0..=15).contains(&current.collidable) {
+                self.calculate_new_ball_events(current.collidable);
+            }
+
+            self.calculate_new_ball_events(current.ball);
 
             return true;
         }
 
         false
+    }
+
+    fn calculate_new_ball_events(&mut self, ball_id: usize) {
+        self.events
+            .retain(|e| e.ball != ball_id && e.collidable != ball_id);
+
+        let other_ball = &self.balls[ball_id];
+
+        for (idx, ball) in self.balls.iter().enumerate() {
+            if idx != ball_id {
+                let time = other_ball.get_collision_time(ball);
+                let event = Event::new(time, ball_id, idx);
+
+                self.events.push(event);
+            }
+        }
+
+        // TODO: add holes and walls
     }
 }
