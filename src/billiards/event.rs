@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct Event {
     pub time: f64,
     pub ball: usize,
@@ -21,8 +22,16 @@ impl PartialEq for Event {
     }
 }
 
+impl Eq for Event {}
+
 impl PartialOrd for Event {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
         self.time.partial_cmp(&other.time)
+    }
+}
+
+impl Ord for Event {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.time.total_cmp(&other.time)
     }
 }
