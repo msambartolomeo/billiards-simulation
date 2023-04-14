@@ -14,7 +14,7 @@ mod constants;
 mod event;
 
 pub struct Table {
-    balls: Vec<Ball>,
+    balls: Vec<Option<Ball>>,
     events: Vec<Event>,
 }
 
@@ -41,14 +41,14 @@ impl Table {
 
         let white_ball = Ball::new(TABLE_WIDTH / 2.0, TABLE_WIDTH / 2.0 + white_offset);
 
-        balls.push(white_ball);
+        balls.push(Some(white_ball));
 
         for (x, y) in constants::get_balls_starting_position() {
             let x_spacing = get_ball_spacing();
             let y_spacing = get_ball_spacing();
             let ball = Ball::new(x + x_spacing, y + y_spacing);
 
-            balls.push(ball);
+            balls.push(Some(ball));
         }
 
         assert_eq!(balls.len(), 16);
@@ -64,29 +64,37 @@ impl Table {
         if let Some(current) = self.events.iter().min().cloned() {
             match current.collidable {
                 0..=15 => {
-                    let (ball, other_ball) = if current.collidable < current.ball {
-                        let (a, b) = self.balls.split_at_mut(current.ball);
-                        (&mut b[0], &mut a[current.collidable])
+                    let first;
+                    let second;
+                    if current.collidable < current.ball {
+                        first = current.collidable;
+                        second = current.ball;
                     } else {
-                        let (a, b) = self.balls.split_at_mut(current.collidable);
-                        (&mut a[current.ball], &mut b[0])
-                    };
+                        first = current.ball;
+                        second = current.collidable;
+                    }
 
-                    ball.collide_ball(other_ball);
+                    let (ball, other_ball) =
+                        if let [first, .., second] = &mut self.balls[first..=second] {
+                            (first.as_mut(), second.as_mut())
+                        } else {
+                            panic!("invalid event indexes");
+                        };
+
+                    if let (Some(ball), Some(other_ball)) = (ball, other_ball) {
+                        ball.collide_ball(other_ball);
+                    }
                 }
                 16..=21 => {
-                    let ball = &mut self.balls[current.ball];
-                    // FIXME: remove mutability from consts
-                    let hole = &HOLE_VARIANTS[current.collidable - BALL_COUNT];
-
-                    // TODO: Delete ball
-                    todo!()
+                    // NOTE: Remove ball from array
+                    self.balls[current.ball].take();
                 }
                 22..=25 => {
-                    let ball = &mut self.balls[current.ball];
-                    let wall = &WALL_VARIANTS[current.collidable - BALL_COUNT];
+                    if let Some(ball) = self.balls[current.ball].as_mut() {
+                        let wall = &WALL_VARIANTS[current.collidable - BALL_COUNT];
 
-                    ball.collide_wall(wall);
+                        ball.collide_wall(wall);
+                    }
                 }
                 _ => panic!("boom"),
             }
@@ -111,17 +119,17 @@ impl Table {
         self.events
             .retain(|e| e.ball != ball_id && e.collidable != ball_id);
 
-        let other_ball = &self.balls[ball_id];
+        if let Some(other_ball) = self.balls[ball_id].as_ref() {
+            for (idx, ball) in self.balls.iter().flatten().enumerate() {
+                if idx != ball_id {
+                    let time = other_ball.get_ball_collision_time(ball);
+                    let event = Event::new(time, ball_id, idx);
 
-        for (idx, ball) in self.balls.iter().enumerate() {
-            if idx != ball_id {
-                let time = other_ball.get_ball_collision_time(ball);
-                let event = Event::new(time, ball_id, idx);
-
-                self.events.push(event);
+                    self.events.push(event);
+                }
             }
-        }
 
-        // TODO: add holes and walls
+            // TODO: add holes and walls
+        }
     }
 }
