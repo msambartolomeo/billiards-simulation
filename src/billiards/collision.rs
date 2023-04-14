@@ -22,6 +22,13 @@ impl Ball {
             mass: BALL_MASS,
         }
     }
+
+    pub fn with_velocity(x: f64, y: f64, v_x: f64, v_y: f64) -> Self {
+        let mut ball = Self::new(x, y);
+        ball.v_x = v_x;
+        ball.v_y = v_y;
+        ball
+    }
 }
 
 pub trait Collide {
