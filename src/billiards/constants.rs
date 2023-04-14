@@ -48,6 +48,7 @@ impl Hole {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Copy)]
 pub enum Wall {
     Top,
     Bottom,

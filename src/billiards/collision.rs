@@ -34,8 +34,8 @@ impl Ball {
 
 pub trait Collide {
     fn get_ball_collision_time(&self, other: &Ball) -> f64;
-    fn get_wall_collision_time(&self) -> (&Wall, f64);
-    fn get_hole_collision_time(&self) -> Option<(&Hole, f64)>;
+    fn get_wall_collision_time(&self) -> (Wall, f64);
+    fn get_hole_collision_time(&self) -> Option<f64>;
 
     fn collide_ball(&mut self, other: &mut Ball);
     fn collide_wall(&mut self, other: &Wall);
@@ -61,10 +61,10 @@ impl Collide for Ball {
         (-coords_dot_vel - discriminant.sqrt()) / vel_dot_vel
     }
 
-    fn get_wall_collision_time(&self) -> (&Wall, f64) {
+    fn get_wall_collision_time(&self) -> (Wall, f64) {
         let mut times = Vec::with_capacity(WALL_VARIANTS.len());
 
-        for wall in &WALL_VARIANTS {
+        for wall in WALL_VARIANTS {
             match wall {
                 Wall::Top => {
                     if self.v_y > 0.0 {
@@ -98,7 +98,7 @@ impl Collide for Ball {
         times[0]
     }
 
-    fn get_hole_collision_time(&self) -> Option<(&Hole, f64)> {
+    fn get_hole_collision_time(&self) -> Option<f64> {
         for hole in &HOLE_VARIANTS {
             let (hole_x, hole_y) = Hole::coordinates(&hole);
             let delta_coords = (self.x - hole_x, self.y - hole_y);
@@ -117,7 +117,7 @@ impl Collide for Ball {
             if discriminant < 0.0 {
                 continue;
             }
-            return Some((hole, (-coords_dot_vel - discriminant.sqrt()) / vel_dot_vel));
+            return Some((-coords_dot_vel - discriminant.sqrt()) / vel_dot_vel);
         }
         None
     }

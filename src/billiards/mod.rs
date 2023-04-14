@@ -4,10 +4,7 @@ use event::Event;
 
 use rand::Rng;
 
-use self::{
-    collision::Collide,
-    constants::{BALL_SPACING_RANGE, HOLE_VARIANTS, WALL_VARIANTS},
-};
+use self::{collision::Collide, constants::BALL_SPACING_RANGE, event::CollisionType};
 
 mod collision;
 mod constants;
@@ -70,16 +67,16 @@ impl Table {
 
     pub fn handle_event(&mut self) -> bool {
         if let Some(current) = self.events.iter().min().cloned() {
-            match current.collidable {
-                0..=15 => {
+            match current.collision_type {
+                CollisionType::Ball(other_ball) => {
                     let first;
                     let second;
-                    if current.collidable < current.ball {
-                        first = current.collidable;
+                    if other_ball < current.ball {
+                        first = other_ball;
                         second = current.ball;
                     } else {
                         first = current.ball;
-                        second = current.collidable;
+                        second = other_ball;
                     }
 
                     let (ball, other_ball) =
@@ -93,15 +90,13 @@ impl Table {
                         ball.collide_ball(other_ball);
                     }
                 }
-                16..=21 => {
+                CollisionType::Hole => {
                     // NOTE: Remove ball from array
                     self.balls[current.ball].take();
                 }
-                22..=25 => {
+                CollisionType::Wall(wall) => {
                     if let Some(ball) = self.balls[current.ball].as_mut() {
-                        let wall = &WALL_VARIANTS[current.collidable - BALL_COUNT];
-
-                        ball.collide_wall(wall);
+                        ball.collide_wall(&wall);
                     }
                 }
                 _ => panic!("boom"),
@@ -111,12 +106,11 @@ impl Table {
             self.events.iter_mut().for_each(|e| e.time -= current.time);
 
             // If colidable is ball calculate its new events
-            if (0..=15).contains(&current.collidable) {
-                self.calculate_new_ball_events(current.collidable);
+            if let CollisionType::Ball(id) = current.collision_type {
+                self.calculate_new_ball_events(id);
             }
 
             self.calculate_new_ball_events(current.ball);
-
             return true;
         }
 
@@ -125,20 +119,27 @@ impl Table {
 
     fn calculate_new_ball_events(&mut self, ball_id: usize) {
         self.events
-            .retain(|e| e.ball != ball_id && e.collidable != ball_id);
+            .retain(|e| e.ball != ball_id && e.collision_type != CollisionType::Ball(ball_id));
 
         // NOTE: if ball was removed events will not be added
         if let Some(ball) = self.balls[ball_id].as_ref() {
             for (idx, other_ball) in self.balls.iter().flatten().enumerate() {
                 if idx != ball_id {
                     let time = ball.get_ball_collision_time(other_ball);
-                    let event = Event::new(time, ball_id, idx);
+                    let event = Event::new(time, ball_id, CollisionType::Ball(idx));
 
                     self.events.push(event);
                 }
             }
 
-            // TODO: add holes and walls
+            // Add a hole collision if it exists
+            if let Some(time) = ball.get_hole_collision_time() {
+                let event = Event::new(time, ball_id, CollisionType::Hole);
+            }
+
+            // Add the nearest wall collision
+            let (wall, time) = ball.get_wall_collision_time();
+            let event = Event::new(time, ball_id, CollisionType::Wall(wall));
         }
     }
 }
