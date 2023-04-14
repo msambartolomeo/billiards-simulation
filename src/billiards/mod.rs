@@ -127,10 +127,11 @@ impl Table {
         self.events
             .retain(|e| e.ball != ball_id && e.collidable != ball_id);
 
-        if let Some(other_ball) = self.balls[ball_id].as_ref() {
-            for (idx, ball) in self.balls.iter().flatten().enumerate() {
+        // NOTE: if ball was removed events will not be added
+        if let Some(ball) = self.balls[ball_id].as_ref() {
+            for (idx, other_ball) in self.balls.iter().flatten().enumerate() {
                 if idx != ball_id {
-                    let time = other_ball.get_ball_collision_time(ball);
+                    let time = ball.get_ball_collision_time(other_ball);
                     let event = Event::new(time, ball_id, idx);
 
                     self.events.push(event);
