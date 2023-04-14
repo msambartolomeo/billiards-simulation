@@ -74,18 +74,18 @@ impl Collide for Ball {
                 }
                 Wall::Bottom => {
                     if self.v_y < 0.0 {
-                        let time = (self.y - self.r) / self.v_y;
+                        let time = (self.r - self.y) / self.v_y;
                         times.push((wall, time));
                     }
                 }
                 Wall::Left => {
-                    if self.v_x > 0.0 {
-                        let time = (self.x - self.r) / self.v_x;
+                    if self.v_x < 0.0 {
+                        let time = (self.r - self.x) / self.v_x;
                         times.push((wall, time));
                     }
                 }
                 Wall::Right => {
-                    if self.v_x < 0.0 {
+                    if self.v_x > 0.0 {
                         let time = (TABLE_LENGTH - self.x - self.r) / self.v_x;
                         times.push((wall, time));
                     }
