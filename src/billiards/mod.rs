@@ -39,7 +39,12 @@ impl Table {
 
         let mut balls = Vec::with_capacity(BALL_COUNT);
 
-        let white_ball = Ball::new(TABLE_WIDTH / 2.0, TABLE_WIDTH / 2.0 + white_offset);
+        let white_ball = Ball::with_velocity(
+            TABLE_WIDTH / 2.0,
+            TABLE_WIDTH / 2.0 + white_offset,
+            initial_velocity,
+            0.0,
+        );
 
         balls.push(Some(white_ball));
 
