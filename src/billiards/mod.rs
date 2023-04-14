@@ -15,12 +15,6 @@ pub struct Table {
     events: Vec<Event>,
 }
 
-impl Default for Table {
-    fn default() -> Self {
-        Self::new(true, 0.0, 2.0)
-    }
-}
-
 impl Table {
     pub fn new(fixed_ball_spacing: bool, white_offset: f64, initial_velocity: f64) -> Self {
         let mut rng = rand::thread_rng();
