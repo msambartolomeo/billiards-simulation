@@ -135,11 +135,13 @@ impl Table {
             // Add a hole collision if it exists
             if let Some(time) = ball.get_hole_collision_time() {
                 let event = Event::new(time, ball_id, CollisionType::Hole);
+                self.events.push(event);
             }
 
             // Add the nearest wall collision
             let (wall, time) = ball.get_wall_collision_time();
             let event = Event::new(time, ball_id, CollisionType::Wall(wall));
+            self.events.push(event);
         }
     }
 }
