@@ -20,12 +20,12 @@ pub struct Table {
 
 impl Default for Table {
     fn default() -> Self {
-        Self::new(true, 0.0)
+        Self::new(true, 0.0, 1.0)
     }
 }
 
 impl Table {
-    pub fn new(fixed_ball_spacing: bool, white_offset: f64) -> Self {
+    pub fn new(fixed_ball_spacing: bool, white_offset: f64, initial_velocity: f64) -> Self {
         let mut rng = rand::thread_rng();
 
         let mut get_ball_spacing = move || {
@@ -53,11 +53,14 @@ impl Table {
 
         assert_eq!(balls.len(), 16);
 
-        // NOTE: Events is a normal vector but we handle the ordering
         let events = vec![];
-        // TODO: Calculate events
 
-        Table { balls, events }
+        let mut pool = Self { balls, events };
+
+        // NOTE: calculate events of white ball
+        pool.calculate_new_ball_events(0);
+
+        pool
     }
 
     pub fn handle_event(&mut self) -> bool {
