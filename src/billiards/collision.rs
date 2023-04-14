@@ -1,5 +1,6 @@
 use super::constants::{
-    Hole, Wall, BALL_MASS, BALL_RADIUS, TABLE_LENGTH, TABLE_WIDTH, WALL_VARIANTS,
+    Hole, Wall, BALL_MASS, BALL_RADIUS, HOLE_RADIUS, HOLE_VARIANTS, TABLE_LENGTH, TABLE_WIDTH,
+    WALL_VARIANTS,
 };
 
 pub struct Ball {
@@ -98,7 +99,27 @@ impl Collide for Ball {
     }
 
     fn get_hole_collision_time(&self) -> Option<(&Hole, f64)> {
-        todo!()
+        for hole in &HOLE_VARIANTS {
+            let (hole_x, hole_y) = Hole::coordinates(&hole);
+            let delta_coords = (self.x - hole_x, self.y - hole_y);
+            let delta_vel = (self.v_x, self.v_y);
+
+            let coords_dot_vel = delta_coords.0 * delta_vel.0 + delta_coords.1 * delta_vel.1;
+            if coords_dot_vel >= 0.0 {
+                continue;
+            }
+            let sigma = self.r + HOLE_RADIUS;
+            let coords_dot_coords =
+                delta_coords.0 * delta_coords.0 + delta_coords.1 * delta_coords.1;
+            let vel_dot_vel = delta_vel.0 * delta_vel.0 + delta_vel.1 * delta_vel.1;
+            let discriminant =
+                coords_dot_vel * coords_dot_vel - vel_dot_vel * (coords_dot_coords - sigma * sigma);
+            if discriminant < 0.0 {
+                continue;
+            }
+            return Some((hole, (-coords_dot_vel - discriminant.sqrt()) / vel_dot_vel));
+        }
+        None
     }
 
     fn collide_ball(&mut self, other: &mut Ball) {
