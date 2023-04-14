@@ -72,20 +72,21 @@ impl Table {
                         (&mut a[current.ball], &mut b[0])
                     };
 
-                    ball.collide(other_ball);
+                    ball.collide_ball(other_ball);
                 }
                 16..=21 => {
                     let ball = &mut self.balls[current.ball];
                     // FIXME: remove mutability from consts
                     let hole = &mut HOLE_VARIANTS[current.collidable - BALL_COUNT];
 
-                    ball.collide(hole);
+                    // TODO: Delete ball
+                    todo!()
                 }
                 22..=25 => {
                     let ball = &mut self.balls[current.ball];
                     let wall = &mut WALL_VARIANTS[current.collidable - BALL_COUNT];
 
-                    ball.collide(wall);
+                    ball.collide_wall(wall);
                 }
                 _ => panic!("boom"),
             }
@@ -114,7 +115,7 @@ impl Table {
 
         for (idx, ball) in self.balls.iter().enumerate() {
             if idx != ball_id {
-                let time = other_ball.get_collision_time(ball);
+                let time = other_ball.get_ball_collision_time(ball);
                 let event = Event::new(time, ball_id, idx);
 
                 self.events.push(event);
