@@ -1,5 +1,3 @@
-use core::panic;
-
 use super::constants::{
     Hole, Wall, BALL_MASS, BALL_RADIUS, TABLE_LENGTH, TABLE_WIDTH, WALL_VARIANTS,
 };
@@ -28,11 +26,11 @@ impl Ball {
 
 pub trait Collide {
     fn get_ball_collision_time(&self, other: &Ball) -> f64;
-    fn get_wall_collision_time(&self) -> (Wall, f64);
-    fn get_hole_collision_time(&self) -> Option<(Hole, f64)>;
+    fn get_wall_collision_time(&self) -> (&Wall, f64);
+    fn get_hole_collision_time(&self) -> Option<(&Hole, f64)>;
 
     fn collide_ball(&mut self, other: &mut Ball);
-    fn collide_wall(&mut self, other: &mut Wall);
+    fn collide_wall(&mut self, other: &Wall);
 }
 
 impl Collide for Ball {
@@ -55,10 +53,10 @@ impl Collide for Ball {
         (-coords_dot_vel - discriminant.sqrt()) / vel_dot_vel
     }
 
-    fn get_wall_collision_time(&self) -> (Wall, f64) {
-        let mut times: Vec<(Wall, f64)> = Vec::with_capacity(WALL_VARIANTS.len());
+    fn get_wall_collision_time(&self) -> (&Wall, f64) {
+        let mut times = Vec::with_capacity(WALL_VARIANTS.len());
 
-        for wall in WALL_VARIANTS {
+        for wall in &WALL_VARIANTS {
             match wall {
                 Wall::Top => {
                     if self.v_y > 0.0 {
@@ -87,14 +85,12 @@ impl Collide for Ball {
             }
         }
 
-        if times.is_empty() {
-            panic!("No wall collision time found");
-        }
+        assert!(!times.is_empty(), "No wall collision time found");
         times.sort_by(|a, b| a.1.partial_cmp(&b.1).unwrap());
         times[0]
     }
 
-    fn get_hole_collision_time(&self) -> Option<(Hole, f64)> {
+    fn get_hole_collision_time(&self) -> Option<(&Hole, f64)> {
         todo!()
     }
 
@@ -116,7 +112,7 @@ impl Collide for Ball {
         other.v_y -= j_y / other.mass as f64;
     }
 
-    fn collide_wall(&mut self, other: &mut Wall) {
+    fn collide_wall(&mut self, other: &Wall) {
         match other {
             Wall::Top | Wall::Bottom => {
                 self.v_y = -self.v_y;

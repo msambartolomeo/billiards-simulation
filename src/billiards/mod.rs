@@ -77,14 +77,14 @@ impl Table {
                 16..=21 => {
                     let ball = &mut self.balls[current.ball];
                     // FIXME: remove mutability from consts
-                    let hole = &mut HOLE_VARIANTS[current.collidable - BALL_COUNT];
+                    let hole = &HOLE_VARIANTS[current.collidable - BALL_COUNT];
 
                     // TODO: Delete ball
                     todo!()
                 }
                 22..=25 => {
                     let ball = &mut self.balls[current.ball];
-                    let wall = &mut WALL_VARIANTS[current.collidable - BALL_COUNT];
+                    let wall = &WALL_VARIANTS[current.collidable - BALL_COUNT];
 
                     ball.collide_wall(wall);
                 }
