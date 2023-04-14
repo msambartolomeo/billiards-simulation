@@ -20,7 +20,7 @@ pub struct Table {
 
 impl Default for Table {
     fn default() -> Self {
-        Self::new(true, 0.0, 1.0)
+        Self::new(true, 0.0, 2.0)
     }
 }
 

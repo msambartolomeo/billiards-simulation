@@ -8,7 +8,7 @@ pub struct Ball {
     v_x: f64,
     v_y: f64,
     r: f64,
-    mass: u32,
+    mass: f64,
 }
 
 impl Ball {
@@ -107,16 +107,15 @@ impl Collide for Ball {
         let vel_dot_coords = delta_vel.0 * delta_coords.0 + delta_vel.1 * delta_coords.1;
         let sigma = self.r + other.r;
 
-        let j = 2.0 * self.mass as f64 * other.mass as f64 * vel_dot_coords
-            / (sigma * (self.mass + other.mass) as f64);
+        let j = 2.0 * self.mass * other.mass * vel_dot_coords / (sigma * (self.mass + other.mass));
 
         let j_x = j * delta_coords.0 / sigma;
         let j_y = j * delta_coords.1 / sigma;
 
-        self.v_x += j_x / self.mass as f64;
-        self.v_y += j_y / self.mass as f64;
-        other.v_x -= j_x / other.mass as f64;
-        other.v_y -= j_y / other.mass as f64;
+        self.v_x += j_x / self.mass;
+        self.v_y += j_y / self.mass;
+        other.v_x -= j_x / other.mass;
+        other.v_y -= j_y / other.mass;
     }
 
     fn collide_wall(&mut self, other: &Wall) {

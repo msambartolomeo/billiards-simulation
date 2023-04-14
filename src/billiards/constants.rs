@@ -1,13 +1,13 @@
 use std::ops::RangeInclusive;
 
-pub const TABLE_WIDTH: f64 = 112.0;
-pub const TABLE_LENGTH: f64 = 224.0;
-pub const HOLE_RADIUS: f64 = BALL_RADIUS * 2.0;
+pub const TABLE_WIDTH: f64 = 1.12;
+pub const TABLE_LENGTH: f64 = 2.24;
 pub const BALL_COUNT: usize = 16;
-pub const BALL_MASS: u32 = 165;
-pub const BALL_RADIUS: f64 = 5.7 / 2.0;
-pub const BALL_SPACING_LOWER_BOUND: f64 = 0.02;
-pub const BALL_SPACING_UPPER_BOUND: f64 = 0.03;
+pub const BALL_MASS: f64 = 0.165;
+pub const BALL_RADIUS: f64 = 0.057 / 2.0;
+pub const HOLE_RADIUS: f64 = BALL_RADIUS * 2.0;
+pub const BALL_SPACING_LOWER_BOUND: f64 = 2e-4;
+pub const BALL_SPACING_UPPER_BOUND: f64 = 3e-4;
 pub const BALL_SPACING_RANGE: RangeInclusive<f64> =
     BALL_SPACING_LOWER_BOUND..=BALL_SPACING_UPPER_BOUND;
 
