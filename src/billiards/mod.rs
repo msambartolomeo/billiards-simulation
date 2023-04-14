@@ -90,10 +90,9 @@ impl Table {
                 }
                 CollisionType::Wall(wall) => {
                     if let Some(ball) = self.balls[current.ball].as_mut() {
-                        ball.collide_wall(&wall);
+                        ball.collide_wall(wall);
                     }
                 }
-                _ => panic!("boom"),
             }
 
             // NOTE: advance time of events

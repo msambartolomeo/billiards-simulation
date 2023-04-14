@@ -42,10 +42,6 @@ impl Hole {
             Hole::TopRight => (TABLE_LENGTH, TABLE_WIDTH),
         }
     }
-
-    pub fn radius(&self) -> f64 {
-        HOLE_RADIUS
-    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Copy)]
@@ -54,16 +50,6 @@ pub enum Wall {
     Bottom,
     Left,
     Right,
-}
-
-impl Wall {
-    pub fn coordinate(&self) -> f64 {
-        match self {
-            Wall::Top => TABLE_WIDTH,
-            Wall::Bottom | Wall::Left => 0.0,
-            Wall::Right => TABLE_LENGTH,
-        }
-    }
 }
 
 const BALL_RADIUS_WITH_SPACING: f64 = BALL_RADIUS + BALL_SPACING_UPPER_BOUND;

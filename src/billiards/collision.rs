@@ -1,5 +1,5 @@
 use super::constants::{
-    Hole, Wall, BALL_MASS, BALL_RADIUS, HOLE_RADIUS, HOLE_VARIANTS, TABLE_LENGTH, TABLE_WIDTH,
+    Wall, BALL_MASS, BALL_RADIUS, HOLE_RADIUS, HOLE_VARIANTS, TABLE_LENGTH, TABLE_WIDTH,
     WALL_VARIANTS,
 };
 
@@ -38,7 +38,7 @@ pub trait Collide {
     fn get_hole_collision_time(&self) -> Option<f64>;
 
     fn collide_ball(&mut self, other: &mut Ball);
-    fn collide_wall(&mut self, other: &Wall);
+    fn collide_wall(&mut self, other: Wall);
 }
 
 impl Collide for Ball {
@@ -100,7 +100,7 @@ impl Collide for Ball {
 
     fn get_hole_collision_time(&self) -> Option<f64> {
         for hole in &HOLE_VARIANTS {
-            let (hole_x, hole_y) = Hole::coordinates(&hole);
+            let (hole_x, hole_y) = hole.coordinates();
             let delta_coords = (self.x - hole_x, self.y - hole_y);
             let delta_vel = (self.v_x, self.v_y);
 
@@ -139,7 +139,7 @@ impl Collide for Ball {
         other.v_y -= j_y / other.mass;
     }
 
-    fn collide_wall(&mut self, other: &Wall) {
+    fn collide_wall(&mut self, other: Wall) {
         match other {
             Wall::Top | Wall::Bottom => {
                 self.v_y = -self.v_y;
