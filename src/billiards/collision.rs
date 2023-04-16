@@ -35,6 +35,26 @@ impl Ball {
         self.x += self.v_x * time;
         self.y += self.v_y * time;
     }
+
+    pub fn get_x(&self) -> f64 {
+        self.x
+    }
+
+    pub fn get_y(&self) -> f64 {
+        self.y
+    }
+
+    pub fn get_velocity_x(&self) -> f64 {
+        self.v_x
+    }
+
+    pub fn get_velocity_y(&self) -> f64 {
+        self.v_y
+    }
+
+    pub fn get_radius(&self) -> f64 {
+        self.r
+    }
 }
 
 pub trait Collide {

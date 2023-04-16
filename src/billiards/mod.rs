@@ -7,7 +7,7 @@ use rand::Rng;
 use self::{collision::Collide, constants::BALL_SPACING_RANGE, event::CollisionType};
 
 mod collision;
-mod constants;
+pub(crate) mod constants;
 mod event;
 
 pub struct Table {
@@ -112,7 +112,6 @@ impl Table {
             self.calculate_new_ball_events(current.ball);
             return true;
         }
-
         false
     }
 
@@ -142,5 +141,9 @@ impl Table {
             let event = Event::new(time, ball_id, CollisionType::Wall(wall));
             self.events.push(event);
         }
+    }
+
+    pub fn get_balls(&self) -> &Vec<Option<Ball>> {
+        &self.balls
     }
 }
