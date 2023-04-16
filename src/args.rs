@@ -1,7 +1,7 @@
 use clap::Parser;
 
 #[derive(Parser, Debug)]
-#[command(name = "Multi Agent Simulation", author, version, about)]
+#[command(name = "Billiards Simulation", author, version, about)]
 pub struct Cli {
     #[arg(short, long)]
     pub fixed_ball_spacing: bool,
