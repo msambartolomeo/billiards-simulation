@@ -30,6 +30,11 @@ impl Ball {
         ball.v_y = v_y;
         ball
     }
+
+    pub fn advance(&mut self, time: f64) {
+        self.x += self.v_x * time;
+        self.y += self.v_y * time;
+    }
 }
 
 pub trait Collide {
