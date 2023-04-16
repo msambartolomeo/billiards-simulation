@@ -13,4 +13,6 @@ pub struct Cli {
     pub simulation_output_path: String,
     #[arg(short, long)]
     pub graph_path: Option<String>,
+    #[arg(short, long, default_value_t = 1000)]
+    pub max_iterations: usize,
 }

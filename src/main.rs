@@ -15,5 +15,7 @@ fn main() {
         args.initial_velocity,
     );
 
-    while billiards.handle_event() {}
+    let mut iteration = 0;
+    while billiards.handle_event() && iteration < args.max_iterations {
+        iteration += 1;
 }
