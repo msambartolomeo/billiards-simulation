@@ -126,9 +126,10 @@ impl Table {
             for (idx, other_ball) in self.balls.iter().flatten().enumerate() {
                 if idx != ball_id {
                     let time = ball.get_ball_collision_time(other_ball);
-                    let event = Event::new(time, ball_id, CollisionType::Ball(idx));
-
-                    self.events.push(event);
+                    if time < f64::INFINITY {
+                        let event = Event::new(time, ball_id, CollisionType::Ball(idx));
+                        self.events.push(event);
+                    }
                 }
             }
 
@@ -138,7 +139,7 @@ impl Table {
                 self.events.push(event);
             }
 
-            // Add the nearest wall collision
+            // Add the nearest wall collision, should always exist
             let (wall, time) = ball.get_wall_collision_time();
             let event = Event::new(time, ball_id, CollisionType::Wall(wall));
             self.events.push(event);

@@ -73,7 +73,7 @@ impl Collide for Ball {
 
         let coords_dot_vel = delta_coords.0 * delta_vel.0 + delta_coords.1 * delta_vel.1;
         if coords_dot_vel >= 0.0 {
-            return std::f64::INFINITY;
+            return f64::INFINITY;
         }
         let sigma = self.r + other.r;
         let coords_dot_coords = delta_coords.0 * delta_coords.0 + delta_coords.1 * delta_coords.1;
@@ -81,14 +81,13 @@ impl Collide for Ball {
         let discriminant =
             coords_dot_vel * coords_dot_vel - vel_dot_vel * (coords_dot_coords - sigma * sigma);
         if discriminant < 0.0 {
-            return std::f64::INFINITY;
+            return f64::INFINITY;
         }
         (-coords_dot_vel - discriminant.sqrt()) / vel_dot_vel
     }
 
     fn get_wall_collision_time(&self) -> (Wall, f64) {
-        let mut times = Vec::with_capacity(WALL_VARIANTS.len());
-
+        let mut times = Vec::new();
         for wall in WALL_VARIANTS {
             match wall {
                 Wall::Top => {
