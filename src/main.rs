@@ -20,11 +20,11 @@ fn main() -> Result<()> {
         args.white_offset,
         args.initial_velocity,
     );
-    io::output_snapshot(&mut file, &billiards);
+    io::output_snapshot(&mut file, &billiards)?;
 
     let mut iteration = 0;
     while billiards.handle_event() && iteration < args.max_iterations {
-        io::output_snapshot(&mut file, &billiards);
+        io::output_snapshot(&mut file, &billiards)?;
         iteration += 1;
     }
 
