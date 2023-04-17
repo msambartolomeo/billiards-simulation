@@ -11,7 +11,7 @@ pub fn output_snapshot(file: &mut File, table: &Table) {
 
     // NOTE: Write the number of balls and holes
     let particles_count = balls.iter().flatten().count() + HOLE_VARIANTS.len();
-    writeln!(writer, "{}", particles_count).unwrap();
+    writeln!(writer, "{particles_count}").unwrap();
 
     writeln!(
         writer,
