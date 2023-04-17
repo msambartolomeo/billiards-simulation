@@ -58,7 +58,7 @@ pub fn get_balls_starting_position() -> Vec<(f64, f64)> {
     let mut positions = Vec::with_capacity(BALL_COUNT - 1);
 
     for (row, y_coordinates) in Y_COORDINATES_PER_ROW.iter().enumerate() {
-        let x = 5f64.sqrt() * BALL_RADIUS_WITH_SPACING * row as f64;
+        let x = 3f64.sqrt() * BALL_RADIUS_WITH_SPACING * row as f64;
 
         for y in y_coordinates.iter().flatten() {
             positions.push((TABLE_LENGTH - TABLE_WIDTH / 2.0 + x, TABLE_WIDTH / 2.0 + y));
