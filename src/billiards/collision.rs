@@ -3,6 +3,7 @@ use super::constants::{
     WALL_VARIANTS,
 };
 
+#[derive(Debug, PartialEq)]
 pub struct Ball {
     x: f64,
     y: f64,
@@ -54,6 +55,10 @@ impl Ball {
 
     pub fn get_radius(&self) -> f64 {
         self.r
+    }
+
+    pub fn check_superposition(&self, other: &Ball) -> bool {
+        (self.x - other.x).powi(2) + (self.y - other.y).powi(2) > (self.r + other.r).powi(2)
     }
 }
 

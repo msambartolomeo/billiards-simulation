@@ -8,8 +8,10 @@ pub const BALL_RADIUS: f64 = 0.057 / 2.0;
 pub const HOLE_RADIUS: f64 = BALL_RADIUS * 2.0;
 pub const BALL_SPACING_LOWER_BOUND: f64 = 2e-4;
 pub const BALL_SPACING_UPPER_BOUND: f64 = 3e-4;
-pub const BALL_SPACING_RANGE: RangeInclusive<f64> =
-    BALL_SPACING_LOWER_BOUND..=BALL_SPACING_UPPER_BOUND;
+pub const BALL_SPACING_NOISE: f64 = (BALL_SPACING_UPPER_BOUND - BALL_SPACING_LOWER_BOUND) / 4.0;
+pub const BALL_SPACING_RANGE: RangeInclusive<f64> = -BALL_SPACING_NOISE..=BALL_SPACING_NOISE;
+const BALL_RADIUS_WITH_SPACING: f64 =
+    BALL_RADIUS + (BALL_SPACING_UPPER_BOUND + BALL_SPACING_LOWER_BOUND) / 4.0;
 
 pub const HOLE_VARIANTS: [Hole; 6] = [
     Hole::BottomLeft,
@@ -51,8 +53,6 @@ pub enum Wall {
     Left,
     Right,
 }
-
-const BALL_RADIUS_WITH_SPACING: f64 = BALL_RADIUS + BALL_SPACING_UPPER_BOUND;
 
 pub fn get_balls_starting_position() -> Vec<(f64, f64)> {
     let mut positions = Vec::with_capacity(BALL_COUNT - 1);

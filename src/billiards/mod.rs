@@ -25,8 +25,7 @@ impl Table {
             if fixed_ball_spacing {
                 0.0
             } else {
-                let sign = if rng.gen_bool(0.5) { 1.0 } else { -1.0 };
-                rng.gen_range(BALL_SPACING_RANGE) * sign
+                rng.gen_range(BALL_SPACING_RANGE)
             }
         };
 
@@ -50,6 +49,13 @@ impl Table {
         }
 
         assert_eq!(balls.len(), 16);
+        for ball in balls.iter().flatten() {
+            for other_ball in balls.iter().flatten() {
+                if ball != other_ball {
+                    assert!(ball.check_superposition(other_ball))
+                }
+            }
+        }
 
         let events = vec![];
 
