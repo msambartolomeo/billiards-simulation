@@ -3,15 +3,17 @@ use std::fs::File;
 use args::Cli;
 use billiards::Table;
 
+use anyhow::{Ok, Result};
+
 use clap::Parser;
 
 mod args;
 mod billiards;
 mod io;
 
-fn main() {
+fn main() -> Result<()> {
     let args = Cli::parse();
-    let mut file = File::create(args.simulation_output_path).unwrap();
+    let mut file = File::create(args.simulation_output_path)?;
 
     let mut billiards = Table::new(
         args.fixed_ball_spacing,
@@ -25,4 +27,6 @@ fn main() {
         io::output_snapshot(&mut file, &billiards);
         iteration += 1;
     }
+
+    Ok(())
 }
