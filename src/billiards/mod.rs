@@ -4,7 +4,7 @@ use event::Event;
 
 use rand::Rng;
 
-pub(crate) use constants::{HOLE_RADIUS, HOLE_VARIANTS};
+pub(crate) use constants::{BALL_SPACING_LOWER_BOUND, HOLE_RADIUS, HOLE_VARIANTS};
 
 use self::{collision::Collide, constants::BALL_SPACING_RANGE, event::CollisionType};
 
@@ -52,7 +52,8 @@ impl Table {
         for ball in balls.iter().flatten() {
             for other_ball in balls.iter().flatten() {
                 if ball != other_ball {
-                    assert!(ball.check_superposition(other_ball))
+                    let distance = ball.get_distance(other_ball);
+                    assert!(BALL_SPACING_LOWER_BOUND <= distance);
                 }
             }
         }

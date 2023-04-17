@@ -57,8 +57,8 @@ impl Ball {
         self.r
     }
 
-    pub fn check_superposition(&self, other: &Ball) -> bool {
-        (self.x - other.x).powi(2) + (self.y - other.y).powi(2) > (self.r + other.r).powi(2)
+    pub fn get_distance(&self, other: &Ball) -> f64 {
+        ((self.x - other.x).powi(2) + (self.y - other.y).powi(2)).sqrt()
     }
 }
 
