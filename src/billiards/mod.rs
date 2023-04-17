@@ -4,10 +4,12 @@ use event::Event;
 
 use rand::Rng;
 
+pub(crate) use constants::{HOLE_RADIUS, HOLE_VARIANTS};
+
 use self::{collision::Collide, constants::BALL_SPACING_RANGE, event::CollisionType};
 
 mod collision;
-pub(crate) mod constants;
+mod constants;
 mod event;
 
 pub struct Table {
