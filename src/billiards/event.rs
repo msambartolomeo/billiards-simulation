@@ -1,13 +1,13 @@
 use super::constants::Wall;
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum CollisionType {
     Ball(usize),
     Wall(Wall),
     Hole,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct Event {
     pub time: f64,
     pub ball: usize,

@@ -62,7 +62,7 @@ impl Table {
     }
 
     pub fn handle_event(&mut self) -> bool {
-        if let Some(current) = self.events.iter().min().cloned() {
+        if let Some(current) = self.events.iter().min().copied() {
             // First, advance all balls to the time of the event
             for ball in self.balls.iter_mut().flatten() {
                 ball.advance(current.time);
