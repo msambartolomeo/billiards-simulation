@@ -123,12 +123,14 @@ impl Table {
 
         // NOTE: if ball was removed events will not be added
         if let Some(ball) = self.balls[ball_id].as_ref() {
-            for (idx, other_ball) in self.balls.iter().flatten().enumerate() {
-                if idx != ball_id {
-                    let time = ball.get_ball_collision_time(other_ball);
-                    if time < f64::INFINITY {
-                        let event = Event::new(time, ball_id, CollisionType::Ball(idx));
-                        self.events.push(event);
+            for (idx, other_ball) in self.balls.iter().enumerate() {
+                if let Some(other_ball) = other_ball {
+                    if idx != ball_id {
+                        let time = ball.get_ball_collision_time(other_ball);
+                        if time < f64::INFINITY {
+                            let event = Event::new(time, ball_id, CollisionType::Ball(idx));
+                            self.events.push(event);
+                        }
                     }
                 }
             }
