@@ -11,8 +11,8 @@ pub struct Cli {
     pub initial_velocity: f64,
     #[arg(short, long, default_value_t = String::from("./output.xyz"))]
     pub simulation_output_path: String,
-    #[arg(short, long)]
-    pub graph_path: Option<String>,
+    #[arg(short, long, default_value_t = String::from("./times_output.txt"))]
+    pub times_output_path: String,
     #[arg(short, long, default_value_t = 1000)]
     pub max_iterations: usize,
 }

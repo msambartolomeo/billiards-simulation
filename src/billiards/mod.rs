@@ -68,8 +68,10 @@ impl Table {
         pool
     }
 
-    pub fn handle_event(&mut self) -> bool {
-        if let Some(current) = self.events.iter().min().copied() {
+    pub fn handle_event(&mut self) -> Option<f64> {
+        let event = self.events.iter().min().copied();
+
+        if let Some(current) = event {
             // First, advance all balls to the time of the event
             for ball in self.balls.iter_mut().flatten() {
                 ball.advance(current.time);
@@ -119,9 +121,9 @@ impl Table {
             }
 
             self.calculate_new_ball_events(current.ball);
-            return true;
         }
-        false
+
+        event.map(|e| e.time)
     }
 
     fn calculate_new_ball_events(&mut self, ball_id: usize) {

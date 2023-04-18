@@ -20,13 +20,26 @@ fn main() -> Result<()> {
         args.white_offset,
         args.initial_velocity,
     );
+
     io::output_snapshot(&mut file, &billiards)?;
 
+    let mut event_times_list = Vec::new();
+
     let mut iteration = 0;
-    while billiards.handle_event() && iteration < args.max_iterations {
-        io::output_snapshot(&mut file, &billiards)?;
-        iteration += 1;
+    while iteration < args.max_iterations {
+        let event_time = billiards.handle_event();
+
+        match event_time {
+            Some(time) => {
+                event_times_list.push(time);
+                io::output_snapshot(&mut file, &billiards)?;
+                iteration += 1;
+            }
+            None => break,
+        }
     }
+
+    io::output_event_times(&args.times_output_path, &event_times_list)?;
 
     Ok(())
 }
