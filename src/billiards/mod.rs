@@ -1,12 +1,10 @@
-use collision::Ball;
-use constants::{BALL_COUNT, TABLE_WIDTH};
-use event::Event;
+pub(crate) use constants::{HOLE_RADIUS, HOLE_VARIANTS};
 
 use rand::Rng;
 
-pub(crate) use constants::{BALL_SPACING_LOWER_BOUND, HOLE_RADIUS, HOLE_VARIANTS};
-
-use self::{collision::Collide, constants::BALL_SPACING_RANGE, event::CollisionType};
+use collision::{Ball, Collide};
+use constants::{BALL_COUNT, BALL_SPACING_LOWER_BOUND, BALL_SPACING_RANGE, TABLE_WIDTH};
+use event::{CollisionType, Event};
 
 mod collision;
 mod constants;

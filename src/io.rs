@@ -1,10 +1,9 @@
 use std::io::Write;
 use std::{fs::File, io::BufWriter};
 
-use crate::Result;
-
 use crate::billiards::Table;
 use crate::billiards::{HOLE_RADIUS, HOLE_VARIANTS};
+use crate::Result;
 
 pub fn output_snapshot(file: &mut File, table: &Table) -> Result<()> {
     let mut writer = BufWriter::new(file);

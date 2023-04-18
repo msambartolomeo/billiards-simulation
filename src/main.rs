@@ -1,11 +1,10 @@
 use std::fs::File;
 
+use anyhow::{Ok, Result};
+use clap::Parser;
+
 use args::Cli;
 use billiards::Table;
-
-use anyhow::{Ok, Result};
-
-use clap::Parser;
 
 mod args;
 mod billiards;
