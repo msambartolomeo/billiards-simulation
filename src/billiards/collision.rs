@@ -5,16 +5,16 @@ use super::constants::{
 
 #[derive(Debug, PartialEq)]
 pub struct Ball {
-    x: f64,
-    y: f64,
-    v_x: f64,
-    v_y: f64,
-    r: f64,
-    mass: f64,
+    x: f32,
+    y: f32,
+    v_x: f32,
+    v_y: f32,
+    r: f32,
+    mass: f32,
 }
 
 impl Ball {
-    pub fn new(x: f64, y: f64) -> Self {
+    pub fn new(x: f32, y: f32) -> Self {
         Ball {
             x,
             y,
@@ -25,60 +25,60 @@ impl Ball {
         }
     }
 
-    pub fn with_velocity(x: f64, y: f64, v_x: f64, v_y: f64) -> Self {
+    pub fn with_velocity(x: f32, y: f32, v_x: f32, v_y: f32) -> Self {
         let mut ball = Self::new(x, y);
         ball.v_x = v_x;
         ball.v_y = v_y;
         ball
     }
 
-    pub fn advance(&mut self, time: f64) {
+    pub fn advance(&mut self, time: f32) {
         self.x += self.v_x * time;
         self.y += self.v_y * time;
     }
 
-    pub fn get_x(&self) -> f64 {
+    pub fn get_x(&self) -> f32 {
         self.x
     }
 
-    pub fn get_y(&self) -> f64 {
+    pub fn get_y(&self) -> f32 {
         self.y
     }
 
-    pub fn get_velocity_x(&self) -> f64 {
+    pub fn get_velocity_x(&self) -> f32 {
         self.v_x
     }
 
-    pub fn get_velocity_y(&self) -> f64 {
+    pub fn get_velocity_y(&self) -> f32 {
         self.v_y
     }
 
-    pub fn get_radius(&self) -> f64 {
+    pub fn get_radius(&self) -> f32 {
         self.r
     }
 
-    pub fn get_distance(&self, other: &Ball) -> f64 {
+    pub fn get_distance(&self, other: &Ball) -> f32 {
         ((self.x - other.x).powi(2) + (self.y - other.y).powi(2)).sqrt()
     }
 }
 
 pub trait Collide {
-    fn get_ball_collision_time(&self, other: &Ball) -> f64;
-    fn get_wall_collision_time(&self) -> (Wall, f64);
-    fn get_hole_collision_time(&self) -> Option<f64>;
+    fn get_ball_collision_time(&self, other: &Ball) -> f32;
+    fn get_wall_collision_time(&self) -> (Wall, f32);
+    fn get_hole_collision_time(&self) -> Option<f32>;
 
     fn collide_ball(&mut self, other: &mut Ball);
     fn collide_wall(&mut self, other: Wall);
 }
 
 impl Collide for Ball {
-    fn get_ball_collision_time(&self, other: &Ball) -> f64 {
+    fn get_ball_collision_time(&self, other: &Ball) -> f32 {
         let delta_coords = (self.x - other.x, self.y - other.y);
         let delta_vel = (self.v_x - other.v_x, self.v_y - other.v_y);
 
         let coords_dot_vel = delta_coords.0 * delta_vel.0 + delta_coords.1 * delta_vel.1;
         if coords_dot_vel >= 0.0 {
-            return f64::INFINITY;
+            return f32::INFINITY;
         }
         let sigma = self.r + other.r;
         let coords_dot_coords = delta_coords.0 * delta_coords.0 + delta_coords.1 * delta_coords.1;
@@ -86,12 +86,12 @@ impl Collide for Ball {
         let discriminant =
             coords_dot_vel * coords_dot_vel - vel_dot_vel * (coords_dot_coords - sigma * sigma);
         if discriminant < 0.0 {
-            return f64::INFINITY;
+            return f32::INFINITY;
         }
         (-coords_dot_vel - discriminant.sqrt()) / vel_dot_vel
     }
 
-    fn get_wall_collision_time(&self) -> (Wall, f64) {
+    fn get_wall_collision_time(&self) -> (Wall, f32) {
         let mut times = Vec::new();
         for wall in WALL_VARIANTS {
             match wall {
@@ -127,7 +127,7 @@ impl Collide for Ball {
         times[0]
     }
 
-    fn get_hole_collision_time(&self) -> Option<f64> {
+    fn get_hole_collision_time(&self) -> Option<f32> {
         for hole in &HOLE_VARIANTS {
             let (hole_x, hole_y) = hole.coordinates();
             let delta_coords = (self.x - hole_x, self.y - hole_y);

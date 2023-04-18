@@ -1,16 +1,16 @@
 use std::ops::RangeInclusive;
 
-pub const TABLE_WIDTH: f64 = 1.12;
-pub const TABLE_LENGTH: f64 = 2.24;
+pub const TABLE_WIDTH: f32 = 1.12;
+pub const TABLE_LENGTH: f32 = 2.24;
 pub const BALL_COUNT: usize = 16;
-pub const BALL_MASS: f64 = 0.165;
-pub const BALL_RADIUS: f64 = 0.057 / 2.0;
-pub const HOLE_RADIUS: f64 = BALL_RADIUS * 2.0;
-pub const BALL_SPACING_LOWER_BOUND: f64 = 2e-4;
-pub const BALL_SPACING_UPPER_BOUND: f64 = 3e-4;
-pub const BALL_SPACING_NOISE: f64 = (BALL_SPACING_UPPER_BOUND - BALL_SPACING_LOWER_BOUND) / 4.0;
-pub const BALL_SPACING_RANGE: RangeInclusive<f64> = -BALL_SPACING_NOISE..=BALL_SPACING_NOISE;
-const BALL_RADIUS_WITH_SPACING: f64 =
+pub const BALL_MASS: f32 = 0.165;
+pub const BALL_RADIUS: f32 = 0.057 / 2.0;
+pub const HOLE_RADIUS: f32 = BALL_RADIUS * 2.0;
+pub const BALL_SPACING_LOWER_BOUND: f32 = 2e-4;
+pub const BALL_SPACING_UPPER_BOUND: f32 = 3e-4;
+pub const BALL_SPACING_NOISE: f32 = (BALL_SPACING_UPPER_BOUND - BALL_SPACING_LOWER_BOUND) / 4.0;
+pub const BALL_SPACING_RANGE: RangeInclusive<f32> = -BALL_SPACING_NOISE..=BALL_SPACING_NOISE;
+const BALL_RADIUS_WITH_SPACING: f32 =
     BALL_RADIUS + (BALL_SPACING_UPPER_BOUND + BALL_SPACING_LOWER_BOUND) / 4.0;
 
 pub const HOLE_VARIANTS: [Hole; 6] = [
@@ -34,7 +34,7 @@ pub enum Hole {
 }
 
 impl Hole {
-    pub fn coordinates(&self) -> (f64, f64) {
+    pub fn coordinates(&self) -> (f32, f32) {
         match self {
             Hole::BottomLeft => (0.0, 0.0),
             Hole::BottomMiddle => (TABLE_LENGTH / 2.0, 0.0),
@@ -54,11 +54,11 @@ pub enum Wall {
     Right,
 }
 
-pub fn get_balls_starting_position() -> Vec<(f64, f64)> {
+pub fn get_balls_starting_position() -> Vec<(f32, f32)> {
     let mut positions = Vec::with_capacity(BALL_COUNT - 1);
 
     for (row, y_coordinates) in Y_COORDINATES_PER_ROW.iter().enumerate() {
-        let x = 3f64.sqrt() * BALL_RADIUS_WITH_SPACING * row as f64;
+        let x = 3f32.sqrt() * BALL_RADIUS_WITH_SPACING * row as f32;
 
         for y in y_coordinates.iter().flatten() {
             positions.push((TABLE_LENGTH - TABLE_WIDTH / 2.0 + x, TABLE_WIDTH / 2.0 + y));
@@ -68,7 +68,7 @@ pub fn get_balls_starting_position() -> Vec<(f64, f64)> {
     positions
 }
 
-const Y_COORDINATES_PER_ROW: [[Option<f64>; 5]; 5] = [
+const Y_COORDINATES_PER_ROW: [[Option<f32>; 5]; 5] = [
     [Some(0.0), None, None, None, None],
     [
         Some(-BALL_RADIUS_WITH_SPACING),

@@ -9,13 +9,13 @@ pub enum CollisionType {
 
 #[derive(Debug, Clone, Copy)]
 pub struct Event {
-    pub time: f64,
+    pub time: f32,
     pub ball: usize,
     pub collision_type: CollisionType,
 }
 
 impl Event {
-    pub fn new(time: f64, ball: usize, collision_type: CollisionType) -> Self {
+    pub fn new(time: f32, ball: usize, collision_type: CollisionType) -> Self {
         Self {
             time,
             ball,

@@ -16,7 +16,7 @@ pub struct Table {
 }
 
 impl Table {
-    pub fn new(fixed_ball_spacing: bool, white_offset: f64, initial_velocity: f64) -> Self {
+    pub fn new(fixed_ball_spacing: bool, white_offset: f32, initial_velocity: f32) -> Self {
         let mut rng = rand::thread_rng();
 
         let mut get_ball_spacing = move || {
@@ -66,7 +66,7 @@ impl Table {
         pool
     }
 
-    pub fn handle_event(&mut self) -> Option<f64> {
+    pub fn handle_event(&mut self) -> Option<f32> {
         let event = self.events.iter().min().copied();
 
         if let Some(current) = event {
@@ -134,7 +134,7 @@ impl Table {
                 if let Some(other_ball) = other_ball {
                     if idx != ball_id {
                         let time = ball.get_ball_collision_time(other_ball);
-                        if time < f64::INFINITY {
+                        if time < f32::INFINITY {
                             let event = Event::new(time, ball_id, CollisionType::Ball(idx));
                             self.events.push(event);
                         }
