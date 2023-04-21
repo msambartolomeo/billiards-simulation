@@ -27,10 +27,11 @@ fn main() -> Result<()> {
     let mut iteration = 0;
     while iteration < args.max_iterations {
         let event_time = billiards.handle_event();
+        let ball_count = billiards.get_balls().iter().flatten().count();
 
         match event_time {
             Some(time) => {
-                event_times_list.push(time);
+                event_times_list.push((time, ball_count));
                 io::output_snapshot(&mut file, &billiards)?;
                 iteration += 1;
             }

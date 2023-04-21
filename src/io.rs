@@ -74,13 +74,13 @@ pub fn output_snapshot(file: &mut File, table: &Table) -> Result<()> {
     Ok(())
 }
 
-pub fn output_event_times(path: &str, events_times_list: &[f64]) -> Result<()> {
+pub fn output_event_times(path: &str, events_times_list: &[(f64, usize)]) -> Result<()> {
     let mut output = File::create(path)?;
 
     writeln!(output, "{}", events_times_list.len())?;
 
-    for time in events_times_list {
-        writeln!(output, "{time}")?;
+    for (time, ball_count) in events_times_list {
+        writeln!(output, "{time} {ball_count}")?;
     }
     Ok(())
 }
