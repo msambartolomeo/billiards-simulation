@@ -5,6 +5,17 @@ use crate::billiards::Table;
 use crate::billiards::{HOLE_RADIUS, HOLE_VARIANTS};
 use crate::Result;
 
+const COLORS: [[f64; 3]; 8] = [
+    [0.0, 0.0, 0.0], // Black
+    [1.0, 1.0, 0.0], // Yellow
+    [0.0, 0.0, 1.0], // Blue
+    [1.0, 0.0, 0.0], // Red
+    [1.0, 0.0, 1.0], // Purple
+    [1.0, 0.5, 0.0], // Orange
+    [0.0, 0.5, 0.0], // Green
+    [0.5, 0.0, 0.0], // Maroon
+];
+
 pub fn output_snapshot(file: &mut File, table: &Table) -> Result<()> {
     let mut writer = BufWriter::new(file);
 
@@ -16,35 +27,48 @@ pub fn output_snapshot(file: &mut File, table: &Table) -> Result<()> {
 
     writeln!(
         writer,
-        "Properties=pos:R:2:velo:R:2:radius:R:1:type:I:1 pbc=\"F F\"",
+        "Properties=id:I:1:pos:R:2:velo:R:2:radius:R:1:color:R:3 pbc=\"F F\"",
     )?;
 
     // NOTE: Write the balls
-    for ball in balls.iter().flatten() {
-        writeln!(
-            writer,
-            "{:.12} {:.12} {:.12} {:.12} {:.12} {}",
-            ball.get_x(),
-            ball.get_y(),
-            ball.get_velocity_x(),
-            ball.get_velocity_y(),
-            ball.get_radius(),
-            0
-        )?;
-    }
+    for (id, ball) in balls.iter().enumerate() {
+        if let Some(ball) = ball {
+            let color = if id == 0 {
+                [1.0, 1.0, 1.0]
+            } else {
+                COLORS[id % COLORS.len()]
+            };
 
+            writeln!(
+                writer,
+                "{} {:.12} {:.12} {:.12} {:.12} {:.12} {} {} {}",
+                id,
+                ball.get_x(),
+                ball.get_y(),
+                ball.get_velocity_x(),
+                ball.get_velocity_y(),
+                ball.get_radius(),
+                color[0],
+                color[1],
+                color[2],
+            )?;
+        }
+    }
     // NOTE: Write the holes
     let holes = &HOLE_VARIANTS;
-    for hole in holes.iter() {
+    for (idx, hole) in holes.iter().enumerate() {
         writeln!(
             writer,
-            "{:.12} {:.12} {:.12} {:.12} {:.12} {}",
+            "{} {:.12} {:.12} {:.12} {:.12} {:.12} {} {} {}",
+            idx + balls.len(),
             hole.coordinates().0,
             hole.coordinates().1,
             0.0,
             0.0,
             HOLE_RADIUS,
-            1
+            1.0,
+            1.0,
+            1.0
         )?;
     }
     Ok(())
