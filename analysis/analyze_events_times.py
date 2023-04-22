@@ -56,11 +56,12 @@ def graph_events_times(times_per_pos: dict[float, list[list[float]]]):
         plt.errorbar(
             pos,
             numpy.mean(avg_per_run),
-            yerr=numpy.std(avg_per_run),
+            yerr=numpy.std(avg_per_run) / numpy.sqrt(len(avg_per_run)),
             fmt="bx",
             ecolor="r",
             capsize=5,
         )
+    plt.yscale("log")
     plt.xlabel("Posición inicial en Y de la bola blanca (m)")
     plt.ylabel("Tiempo medio entre eventos (s)")
     plt.savefig("./analysis/results/Mean_Time_Between_Events.png")
@@ -71,11 +72,12 @@ def graph_events_times(times_per_pos: dict[float, list[list[float]]]):
         plt.errorbar(
             pos,
             1 / numpy.mean(avg_per_run),
-            yerr=numpy.std(avg_per_run),
+            yerr=numpy.std(avg_per_run) / numpy.sqrt(len(avg_per_run)),
             fmt="bx",
             ecolor="r",
             capsize=5,
         )
+    plt.yscale("log")
     plt.xlabel("Posición inicial en Y de la bola blanca (m)")
     plt.ylabel("Frecuencia media de eventos (1/s)")
     plt.savefig("./analysis/results/Mean_Event_Frequency.png")
