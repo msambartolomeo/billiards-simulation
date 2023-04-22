@@ -5,15 +5,63 @@ use crate::billiards::Table;
 use crate::billiards::{HOLE_RADIUS, HOLE_VARIANTS};
 use crate::Result;
 
-const COLORS: [[f64; 3]; 8] = [
-    [0.0, 0.0, 0.0], // Black
-    [1.0, 1.0, 0.0], // Yellow
-    [0.0, 0.0, 1.0], // Blue
-    [1.0, 0.0, 0.0], // Red
-    [1.0, 0.0, 1.0], // Purple
-    [1.0, 0.5, 0.0], // Orange
-    [0.0, 0.5, 0.0], // Green
-    [0.5, 0.0, 0.0], // Maroon
+struct RGB {
+    r: f64,
+    g: f64,
+    b: f64,
+}
+
+impl RGB {
+    fn new(r: f64, g: f64, b: f64) -> Self {
+        RGB { r, g, b }
+    }
+}
+
+enum Color {
+    White,
+    Black,
+    Yellow,
+    Red,
+    Green,
+    Blue,
+    Purple,
+    Orange,
+    Maroon,
+}
+
+impl Color {
+    fn get_rgb(&self) -> RGB {
+        match self {
+            Color::White => RGB::new(1.0, 1.0, 1.0),
+            Color::Black => RGB::new(0.0, 0.0, 0.0),
+            Color::Yellow => RGB::new(1.0, 1.0, 0.0),
+            Color::Red => RGB::new(1.0, 0.0, 0.0),
+            Color::Green => RGB::new(0.0, 0.5, 0.0),
+            Color::Blue => RGB::new(0.0, 0.0, 1.0),
+            Color::Purple => RGB::new(1.0, 0.0, 1.0),
+            Color::Orange => RGB::new(1.0, 0.5, 0.0),
+            Color::Maroon => RGB::new(0.5, 0.0, 0.0),
+        }
+    }
+}
+
+const COLORS: [Color; 16] = [
+    Color::White,
+    Color::Yellow,
+    Color::Blue,
+    Color::Red,
+    Color::Purple,
+    Color::Black,
+    Color::Orange,
+    Color::Green,
+    Color::Maroon,
+    Color::Yellow,
+    Color::Blue,
+    Color::Red,
+    Color::Purple,
+    Color::Orange,
+    Color::Green,
+    Color::Maroon,
 ];
 
 pub fn output_snapshot(file: &mut File, table: &Table) -> Result<()> {
@@ -33,11 +81,7 @@ pub fn output_snapshot(file: &mut File, table: &Table) -> Result<()> {
     // NOTE: Write the balls
     for (id, ball) in balls.iter().enumerate() {
         if let Some(ball) = ball {
-            let color = if id == 0 {
-                [1.0, 1.0, 1.0]
-            } else {
-                COLORS[id % COLORS.len()]
-            };
+            let color = COLORS[id].get_rgb();
 
             writeln!(
                 writer,
@@ -48,9 +92,9 @@ pub fn output_snapshot(file: &mut File, table: &Table) -> Result<()> {
                 ball.get_velocity_x(),
                 ball.get_velocity_y(),
                 ball.get_radius(),
-                color[0],
-                color[1],
-                color[2],
+                color.r,
+                color.g,
+                color.b,
             )?;
         }
     }
