@@ -2,6 +2,7 @@ import os
 
 import matplotlib.pyplot as plt
 import numpy
+import numpy as np
 
 DIRECTORY_PATH = "./analysis/results/diff_starting_pos/"
 Y_STARTING_POS = 0.56
@@ -46,11 +47,11 @@ def graph_events_times(times_per_pos: dict[float, list[list[float]]]):
         # Average and standard deviation of all runs
         avg_per_run = [numpy.mean(run) for run in all_runs]
 
-        print(f"Position: {pos}")
-        print(f"Average time between events: {numpy.mean(avg_per_run)}")
-        print(f"Standard deviation: {numpy.std(avg_per_run)}")
-        print(f"Average frequency of events: {1 / numpy.mean(avg_per_run)}")
-        print()
+        # print(f"Position: {pos}")
+        # print(f"Average time between events: {numpy.mean(avg_per_run)}")
+        # print(f"Standard deviation: {numpy.std(avg_per_run)}")
+        # print(f"Average frequency of events: {1 / numpy.mean(avg_per_run)}")
+        # print()
         metrics.append((pos, avg_per_run))
 
     for pos, avg_per_run in metrics:
@@ -87,9 +88,46 @@ def graph_events_times(times_per_pos: dict[float, list[list[float]]]):
     plt.savefig("./analysis/results/Mean_Event_Frequency.png")
 
 
+def plot_histogram(run_times_per_pos: dict[float, list[float]]):
+    plt.rcParams["font.family"] = "serif"
+    plt.figure(figsize=(1280 / 108, 720 / 108), dpi=108)
+    plt.rcParams.update({"font.size": 16})
+
+    max_value = 0.5
+    step = 0.00015
+    range_value = int(max_value / step)
+
+    for pos, run_times in run_times_per_pos.items():
+        heights, edges = np.histogram(
+            run_times,
+            bins=[i * step for i in range(range_value)],
+            range=(0, 0.5),
+            density=True,
+        )
+
+        x = edges[:-1] + np.diff(edges) / 2
+        plt.plot(x, heights, "-", label=f"Y = {round(pos * 100)} cm")
+
+    plt.yscale("log")
+    plt.xscale("log")
+    plt.xlabel("Tiempo medio entre eventos (s)", fontsize=14)
+    plt.ylabel("Densidad de probabilidad", fontsize=14)
+    plt.legend()
+    plt.savefig("./analysis/results/Event_Frequency_Histogram.png")
+
+
 def main():
     times_per_offsets = read_from_dir(DIRECTORY_PATH)
     graph_events_times(times_per_offsets)
+
+    # For positions 0.56, 0.42, and 0.49, get a dict with the times of all runs
+    all_runs_in_offset = {}
+    for offset in [0.56, 0.42, 0.49]:
+        all_runs_in_offset[offset] = []
+        for run in times_per_offsets[offset]:
+            all_runs_in_offset[offset].extend(run)
+
+    plot_histogram(all_runs_in_offset)
 
 
 if __name__ == "__main__":

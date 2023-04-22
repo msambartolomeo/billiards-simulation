@@ -9,7 +9,7 @@ RUNS_PER_OFFSET = 10
 Y_STEP = 0.014
 
 
-RUNS_PER_POS = 50
+RUNS_PER_POS = 200
 
 
 RESULTS_PATH = f"./analysis/results/diff_starting_pos/pos{{}}/"
