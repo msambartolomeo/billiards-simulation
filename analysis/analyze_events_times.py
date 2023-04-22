@@ -38,6 +38,7 @@ def read_from_dir(directory) -> dict[float, list[list[float]]]:
 def graph_events_times(times_per_pos: dict[float, list[list[float]]]):
     plt.rcParams["font.family"] = "serif"
     plt.figure(figsize=(1280 / 108, 720 / 108), dpi=108)
+    plt.rcParams.update({"font.size": 16})
 
     # For each stating position, graph the average time between events, averaging over all runs
     metrics = []
@@ -54,7 +55,7 @@ def graph_events_times(times_per_pos: dict[float, list[list[float]]]):
 
     for pos, avg_per_run in metrics:
         plt.errorbar(
-            pos,
+            pos * 100,
             numpy.mean(avg_per_run),
             yerr=numpy.std(avg_per_run) / numpy.sqrt(len(avg_per_run)),
             fmt="bx",
@@ -62,24 +63,27 @@ def graph_events_times(times_per_pos: dict[float, list[list[float]]]):
             capsize=5,
         )
     plt.yscale("log")
-    plt.xlabel("Posición inicial en Y de la bola blanca (m)")
-    plt.ylabel("Tiempo medio entre eventos (s)")
+    plt.xlabel("Posición inicial en Y de la bola blanca (cm)", fontsize=18)
+    plt.ylabel("Tiempo medio entre eventos (s)", fontsize=18)
     plt.savefig("./analysis/results/Mean_Time_Between_Events.png")
 
     plt.clf()
 
     for pos, avg_per_run in metrics:
+        # Convert to frequency
+        avg_per_run = [1 / time for time in avg_per_run]
+
         plt.errorbar(
-            pos,
-            1 / numpy.mean(avg_per_run),
+            pos * 100,
+            numpy.mean(avg_per_run),
             yerr=numpy.std(avg_per_run) / numpy.sqrt(len(avg_per_run)),
             fmt="bx",
             ecolor="r",
             capsize=5,
         )
     plt.yscale("log")
-    plt.xlabel("Posición inicial en Y de la bola blanca (m)")
-    plt.ylabel("Frecuencia media de eventos (1/s)")
+    plt.xlabel("Posición inicial en Y de la bola blanca (cm)", fontsize=18)
+    plt.ylabel("Frecuencia media de eventos (1/s)", fontsize=18)
     plt.savefig("./analysis/results/Mean_Event_Frequency.png")
 
 
