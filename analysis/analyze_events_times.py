@@ -116,9 +116,32 @@ def plot_histogram(run_times_per_pos: dict[float, list[float]]):
     plt.savefig("./analysis/results/Event_Frequency_Histogram.png")
 
 
+def plot_total_time(times_per_pos: dict[float, list[list[float]]]):
+    plt.rcParams["font.family"] = "serif"
+    plt.figure(figsize=(1280 / 108, 720 / 108), dpi=108)
+    plt.rcParams.update({"font.size": 16})
+
+    for pos in times_per_pos:
+        total_time = [numpy.sum(run) for run in times_per_pos[pos]]
+        plt.errorbar(
+            pos * 100,
+            numpy.mean(total_time),
+            yerr=numpy.std(total_time) / numpy.sqrt(len(total_time)),
+            fmt="bx",
+            ecolor="r",
+            capsize=5,
+        )
+
+    plt.yscale("log")
+    plt.xlabel("Posición inicial en Y de la bola blanca (cm)", fontsize=18)
+    plt.ylabel("Tiempo total de simulación (s)", fontsize=18)
+    plt.savefig("./analysis/results/Total_Time.png")
+
+
 def main():
     times_per_offsets = read_from_dir(DIRECTORY_PATH)
     graph_events_times(times_per_offsets)
+    plot_total_time(times_per_offsets)
 
     # For positions 0.56, 0.42, and 0.49, get a dict with the times of all runs
     all_runs_in_offset = {}
