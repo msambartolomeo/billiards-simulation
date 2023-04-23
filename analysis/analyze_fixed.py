@@ -24,6 +24,7 @@ def main():
     plt.figure(figsize=(1280 / 108, 720 / 108), dpi=108)
     plt.rcParams.update({"font.size": 16})
     plt.ylabel("Tiempo medio entre eventos (s)", fontsize=18)
+    plt.ylim(4.5, 5)
 
     double_1 = read_mean_time_from_file("double_1.txt")
     double_2 = read_mean_time_from_file("double_2.txt")
